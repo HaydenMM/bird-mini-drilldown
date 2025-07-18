@@ -35,7 +35,6 @@ This dataset results from community feedback, leading to the compilation of **50
 | Model:     | Experiment # | Prompt Used | Simple EX | Moderate EX | Challenging EX | Total EX |
 |------------|--------------|-------------|-----------|-------------|----------------|----------|
 | GPT-4-Turbo | exp_2       | 1           | 57.43     | 34.00       | 14.71          | 37.00    |
-|------------|--------------|-------------|-----------|-------------|----------------|----------|
 | GPT-3.5-Turbo | exp_14    | 1           | 50.00     | 25.20       | 10.78          | 29.60    |
 
 
