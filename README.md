@@ -1,4 +1,4 @@
-# Benchmarking LLMs
+# BIRD Progressive Drill-Down
 
 This dataset results from community feedback, leading to the compilation of **500 high-quality text2sql pairs** derived from 11 distinct databases in a development environment.
 
