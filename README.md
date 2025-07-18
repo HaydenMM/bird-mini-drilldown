@@ -40,7 +40,7 @@
 
 - BIRD-mini
 
-## Benchmarking LLM Hallucinations in Text-to-SQL through Progressive Query Path Analysis
+## LLM Hallucinations in Text-to-SQL through Progressive Query Path Analysis
 
 - A paper that presents a novel methodology for identifying and characterizing hallucinations in Large Language Models (LLMs) performing text-to-SQL tasks by leveraging progressive query decomposition.
 
