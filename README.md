@@ -1,5 +1,7 @@
 # BIRD-mini Progressive Drill-Down
 
+![bird progressive drill down](img/bird-drill.png?raw=true)
+
 ## Prompts:
 
 **(1)**
