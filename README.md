@@ -36,5 +36,7 @@ Requirements:
 - The generated question must correspond exactly to what this partial SQL retrieves
 - Maintain the same domain context and terminology as the original question
 - The question should be answerable using only this partial SQL query
-- This should be a logical step toward answering the original complex question Generate only the natural language question.
+- This should be a logical step toward answering the original complex question
+
+Generate only the natural language question.
 ```
