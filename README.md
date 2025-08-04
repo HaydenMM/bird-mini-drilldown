@@ -53,9 +53,14 @@ Example Output:
 `llm/exp_result/exp_progressive_3_5_claude/predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json`
 
 These outputs need to be cleaned since the outputs include deliminators for the bird database categories (i.e. `t----- bird -----\tdebit_card_specializing",`)
+Adjust the input and output file names at the bottom of the file 
+```
+input_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json"  # Replace with your input JSON file
+output_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json"
+```
 
 ```
-cd llm/exp_result/exp_progressive_3_5_claude/
+cd llm/data/
 python fix_data.py
 ```
 
@@ -65,6 +70,10 @@ We evaluate all six models performance and hallucination patterns via two Jupyte
 `notebooks/Figures.ipynb`
 
 ## Results
+![graph 1 probability of emergent hallucination in final step](materials/g1.png?raw=true)
+![graph 2 probability of recurrent hallucination in final step](materials/g2.png?raw=true)
+![graph 3 probability of emergent hallucination in final step with added LLM history context](materials/g3.png?raw=true)
+![graph 3 probability of recurrent hallucination in final step with added LLM history context](materials/g4.png?raw=true)
 
 ## Prompts
 **Prompt 1: Generating Sub-Questions**
