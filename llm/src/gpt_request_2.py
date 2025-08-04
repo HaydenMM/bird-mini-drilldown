@@ -13,7 +13,7 @@ from transformers import GemmaTokenizer
 import torch
 
 
-from prompt import generate_combined_prompts_one
+from prompt_2 import generate_combined_prompts
 
 """ OpenAI configure """
 api_key="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"
@@ -52,7 +52,6 @@ def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
     global chat_history
 
     for _ in range(MAX_API_RETRY):
-        # chat_history = []  # Reset chat history for each new prompt
         try:
             # OpenAI GPT fallback
             chat_history.append({"role": "user", "content": prompt})
@@ -66,10 +65,9 @@ def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
                 stop=stop,
             )
 
-            response_content = result.choices[0].message.content
-            
+            response_content = result.choices[0].message.content            
             chat_history.append({"role": "assistant", "content": response_content})
-
+            
             if is_original:
                 print("Original question detected, resetting chat history.")
                 # Reset chat history
@@ -79,7 +77,7 @@ def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
 
         except Exception as e:
             response_content = f"error: {e}"
-            print(response_content)
+            # print(response_content)
             time.sleep(4)
 
     return response_content
@@ -127,18 +125,17 @@ def decouple_question_schema(datasets, db_root_path):
     db_path_list = []
     knowledge_list = []
     for data in datasets:
-        # is_original.append(data["is_original"])
-        is_original.append(data.get("is_original", True))
+        is_original.append(1)
         question_list.append(data["question"])
         cur_db_path = os.path.join(db_root_path, data["db_id"], f"{data['db_id']}.sqlite")
         db_path_list.append(cur_db_path)
         # Uncomment if using partial/progressive query dataset
-        if data["is_original"]:
-            knowledge_list.append(data["evidence"])
-        else:
-            knowledge_list.append(None)
+        # if data["is_original"]:
+        #     knowledge_list.append(data["evidence"])
+        # else:
+        #     knowledge_list.append(None)
 
-        # knowledge_list.append(data["evidence"])
+        knowledge_list.append(data["evidence"])
 
     return question_list, db_path_list, knowledge_list, is_original
 
@@ -172,7 +169,6 @@ def worker_function(question_data):
     """
     prompt, engine, db_path, question, i, is_original = question_data
     response = connect_gpt(engine, prompt, 512, 0, ["--", "\n\n", ";", "#"], is_original)
-        
     sql = post_process_response(response, db_path)
     print(f"Processed {i}th question: {question}")
     return sql, i
@@ -186,7 +182,7 @@ def collect_response_from_gpt(
     """
     tasks = [
         (
-            generate_combined_prompts_one(
+            generate_combined_prompts(
                 db_path=db_path_list[i],
                 question=question_list[i],
                 sql_dialect=sql_dialect,
@@ -216,7 +212,7 @@ if __name__ == "__main__":
     args_parser.add_argument("--use_knowledge", type=str, default="False")
     args_parser.add_argument("--db_root_path", type=str, default="")
     args_parser.add_argument("--api_key", type=str, required=True)
-    args_parser.add_argument("--engine", type=str, required=True, default="gpt-4.1-mini")
+    args_parser.add_argument("--engine", type=str, required=True, default="gpt-3.5-turbo")
     args_parser.add_argument("--data_output_path", type=str)
     args_parser.add_argument("--chain_of_thought", type=str)
     args_parser.add_argument("--num_processes", type=int, default=3)

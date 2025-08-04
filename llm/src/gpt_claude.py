@@ -3,8 +3,7 @@ import argparse
 import json
 import os
 import time
-import requests
-from openai import OpenAI
+from anthropic import Anthropic
 from tqdm import tqdm
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -12,33 +11,20 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from transformers import GemmaTokenizer
 import torch
 
-
 from prompt import generate_combined_prompts_one
 
-""" OpenAI configure """
-api_key="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"
+""" Anthropic configure """
+api_key = "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"
 
-import os
 os.environ["HF_HUB_DISABLE_SSL_VERIFICATION"] = "1"
 os.environ["HF_TOKEN"] = "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"
 
-
-# Create OpenAI client with SSL verification disabled
-import httpx
-client = OpenAI(
-    api_key=api_key,
-    http_client=httpx.Client(verify=False)  # Disable SSL verification safely
-)
-
+# Create Anthropic client
+client = Anthropic(api_key=api_key)
 
 def new_directory(path):
     if not os.path.exists(path):
         os.makedirs(path)
-
-
-import os
-import torch
-from transformers import AutoModelForCausalLM, GemmaTokenizer
 
 chat_history = []
 gemma_model = None
@@ -46,33 +32,30 @@ gemma_tokenizer = None
 
 def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
     """
-    Unified GPT/Gemma interface with chat history support.
+    Unified Claude interface using Messages API (Claude 3.5 Sonnet).
     """
-    MAX_API_RETRY = 10
     global chat_history
+    MAX_API_RETRY = 10
 
     for _ in range(MAX_API_RETRY):
-        # chat_history = []  # Reset chat history for each new prompt
         try:
-            # OpenAI GPT fallback
-            chat_history.append({"role": "user", "content": prompt})
-            print(chat_history)
-            
-            result = client.chat.completions.create(
+            response = client.messages.create(
                 model=engine,
-                messages=chat_history,
-                temperature=temperature,
                 max_tokens=max_tokens,
-                stop=stop,
+                temperature=temperature,
+                messages=[
+                    *chat_history,
+                    {"role": "user", "content": prompt}
+                ]
             )
 
-            response_content = result.choices[0].message.content
-            
+            response_content = response.content[0].text.strip()
+
+            chat_history.append({"role": "user", "content": prompt})
             chat_history.append({"role": "assistant", "content": response_content})
 
             if is_original:
                 print("Original question detected, resetting chat history.")
-                # Reset chat history
                 chat_history = []
 
             break
@@ -84,69 +67,24 @@ def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
 
     return response_content
 
-
-
-# def connect_gpt(engine, prompt, max_tokens, temperature, stop):
-#     """
-#     Function to connect to the GPT API and get the response.
-#     """
-#     MAX_API_RETRY = 10
-#     for i in range(MAX_API_RETRY):
-#         time.sleep(2)
-#         try:
-#             if engine == "gpt-3.5-turbo-instruct":
-#                 result = client.completions.create(
-#                     model="gpt-3.5-turbo-instruct",
-#                     prompt=prompt,
-#                     max_tokens=max_tokens,
-#                     temperature=temperature,
-#                     stop=stop,
-#                 )
-#                 result = result.choices[0].text
-#             else:  # gpt-4-turbo, gpt-4, gpt-4-32k, gpt-3.5-turbo
-#                 result = client.chat.completions.create(
-#                     model=engine,
-#                     messages=[{"role": "user", "content": prompt}],
-#                     temperature=temperature,
-#                     max_tokens=max_tokens,
-#                     stop=stop,
-#                 )
-#                 result = result.choices[0].message.content
-#                 print(result)
-#             break
-#         except Exception as e:
-#             result = f"error: {e}"
-#             print(result)
-#             time.sleep(4)
-#     return result
-
-
 def decouple_question_schema(datasets, db_root_path):
     question_list = []
     is_original = []
     db_path_list = []
     knowledge_list = []
     for data in datasets:
-        # is_original.append(data["is_original"])
         is_original.append(data.get("is_original", True))
         question_list.append(data["question"])
         cur_db_path = os.path.join(db_root_path, data["db_id"], f"{data['db_id']}.sqlite")
         db_path_list.append(cur_db_path)
-        # Uncomment if using partial/progressive query dataset
         if data["is_original"]:
             knowledge_list.append(data["evidence"])
         else:
             knowledge_list.append(None)
 
-        # knowledge_list.append(data["evidence"])
-
     return question_list, db_path_list, knowledge_list, is_original
 
-
 def generate_sql_file(sql_lst, output_path=None):
-    """
-    Function to save the SQL results to a file.
-    """
     sql_lst.sort(key=lambda x: x[1])
     result = {i: sql for i, (sql, _) in enumerate(sql_lst)}
 
@@ -157,33 +95,22 @@ def generate_sql_file(sql_lst, output_path=None):
 
     return result
 
-
 def post_process_response(response, db_path):
-    sql = response if isinstance(response, str) else response.choices[0].message.content
+    sql = response if isinstance(response, str) else response.strip()
     db_id = os.path.basename(db_path).replace(".sqlite", "")
     sql = f"{sql}\t----- bird -----\t{db_id}"
     return sql
 
-
 def worker_function(question_data):
-    """
-    Function to process each question, generate the prompt,
-    and collect the GPT response.
-    """
     prompt, engine, db_path, question, i, is_original = question_data
     response = connect_gpt(engine, prompt, 512, 0, ["--", "\n\n", ";", "#"], is_original)
-        
     sql = post_process_response(response, db_path)
     print(f"Processed {i}th question: {question}")
     return sql, i
 
-
 def collect_response_from_gpt(
     db_path_list, question_list, is_original, engine, sql_dialect, num_threads=3, knowledge_list=None
 ):
-    """
-    Collect responses from GPT using multiple threads.
-    """
     tasks = [
         (
             generate_combined_prompts_one(
@@ -207,7 +134,6 @@ def collect_response_from_gpt(
             responses.append(future.result())
     return responses
 
-
 if __name__ == "__main__":
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument("--eval_path", type=str, default="")
@@ -216,7 +142,7 @@ if __name__ == "__main__":
     args_parser.add_argument("--use_knowledge", type=str, default="False")
     args_parser.add_argument("--db_root_path", type=str, default="")
     args_parser.add_argument("--api_key", type=str, required=True)
-    args_parser.add_argument("--engine", type=str, required=True, default="gpt-4.1-mini")
+    args_parser.add_argument("--engine", type=str, required=True, default="claude-3.5-sonnet-20240620")
     args_parser.add_argument("--data_output_path", type=str)
     args_parser.add_argument("--chain_of_thought", type=str)
     args_parser.add_argument("--num_processes", type=int, default=3)
@@ -252,4 +178,3 @@ if __name__ == "__main__":
         f"Successfully collected results from {args.engine} for {args.mode} evaluation; "
         f"SQL dialect: {args.sql_dialect}, Use knowledge: {args.use_knowledge}, Use COT: {args.chain_of_thought}"
     )
-

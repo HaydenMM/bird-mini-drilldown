@@ -8,7 +8,7 @@ from openai import OpenAI
 
 # Configure OpenAI client with SSL verification disabled
 
-api_key="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"
+api_key="INSERT_API_KEY_HERE"
 
 client = OpenAI(
     api_key=api_key,
@@ -60,24 +60,14 @@ def connect_gpt(engine, prompt, max_tokens=100, temperature=0.7, stop=None):
     for i in range(MAX_API_RETRY):
         time.sleep(2)
         try:
-            if engine == "gpt-3.5-turbo-instruct":
-                result = client.completions.create(
-                    model="gpt-3.5-turbo-instruct",
-                    prompt=prompt,
-                    max_tokens=max_tokens,
-                    temperature=temperature,
-                    stop=stop,
-                )
-                return result.choices[0].text.strip()
-            else:
-                result = client.chat.completions.create(
-                    model=engine,
-                    messages=[{"role": "user", "content": prompt}],
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    stop=stop,
-                )
-                return result.choices[0].message.content.strip()
+            result = client.chat.completions.create(
+                model=engine,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                stop=stop,
+            )
+            return result.choices[0].message.content.strip()
         except Exception as e:
             print(f"API Error: {e}")
             time.sleep(4)
@@ -129,5 +119,5 @@ def process_json(input_file, output_file):
         json.dump(output_data, f, indent=2)
 
 if __name__ == "__main__":
-    process_json("mini_dev_postgresql.json", "mini_dev_postgresql_partial_3_5_turbo.json")
+    process_json("mini_dev_postgresql.json", "mini_dev_postgresql_drill_down.json")
 
