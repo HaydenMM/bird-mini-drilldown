@@ -80,6 +80,7 @@ We evaluate all six models performance and hallucination patterns via two Jupyte
     `notebooks/Figures.ipynb`
 
 ## Results
+`notebooks/Figures.ipynb`
 ![graph 1 probability of emergent hallucination in final step](materials/g1.png?raw=true)
 ![graph 2 probability of recurrent hallucination in final step](materials/g2.png?raw=true)
 ![graph 3 probability of emergent hallucination in final step with added LLM history context](materials/g3.png?raw=true)
