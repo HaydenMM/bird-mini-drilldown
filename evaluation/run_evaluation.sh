@@ -1,13 +1,13 @@
 # DO NOT CHANGE THIS
-db_root_path='/Users/hmmoore/Desktop/mini_dev/llm/data/dev_databases/'
+db_root_path='/mini_dev/llm/data/dev_databases/'
 num_cpus=16
 meta_time_out=30.0
 # DO NOT CHANGE THIS
 
 # ************************* #
 # predicted_sql_path='../sql_result/predict_mini_dev_gpt-4-32k_cot_SQLite.json' # Replace with your predict sql json path
-# /Users/hmmoore/Desktop/mini_dev/llm/exp_result/turbo_output_kg
-predicted_sql_path='/Users/hmmoore/Desktop/mini_dev/llm/exp_result/exp_progressive_4_1_mini_history/original_queries.json' # Replace with your predict sql json path
+# /mini_dev/llm/exp_result/turbo_output_kg
+predicted_sql_path='/mini_dev/llm/exp_result/exp_progressive_4_1_mini_history/original_queries.json' # Replace with your predict sql json path
 # predicted_sql_path='../sql_result/predict_mini_dev_gpt-4-32k_cot_MySQL.json' # Replace with your predict sql json path
 
 #sql_dialect="SQLite" # ONLY Modify this
@@ -21,7 +21,7 @@ base_name=$(basename "$predicted_sql_path" .json)
 # Define the output log path
 # output_log_path="../eval_result/${base_name}.txt"
 
-output_log_path="/Users/hmmoore/Desktop/mini_dev/llm/exp_result/exp_original/log.txt"
+output_log_path="/mini_dev/llm/exp_result/exp_original/log.txt"
 
 case $sql_dialect in
   "SQLite")
@@ -29,8 +29,8 @@ case $sql_dialect in
     ground_truth_path="../sqlite/mini_dev_sqlite_gold.sql"
     ;;
   "PostgreSQL")
-    diff_json_path="/Users/hmmoore/Desktop/mini_dev/llm/data/mini_dev_postgresql.jsonl"
-    ground_truth_path="/Users/hmmoore/Desktop/mini_dev/llm/data/mini_dev_postgresql_gold.sql"
+    diff_json_path="/mini_dev/llm/data/mini_dev_postgresql.jsonl"
+    ground_truth_path="/mini_dev/llm/data/mini_dev_postgresql_gold.sql"
     ;;
   "MySQL")
     diff_json_path="../mysql/mini_dev_mysql.jsonl"
