@@ -2,6 +2,31 @@
 
 ![bird progressive drill down](materials/pipe.png?raw=true)
 
+## Introduction
+Despite impressive benchmark scores, Large Language Mod-
+els (LLMs) can still produce flawed and incorrect responses
+for Text-to-SQL tasks. While prior work has decomposed
+complex SQL queries in an attempt to improve LLM bench-
+mark performance, none have systematically analyzed hallu-
+cination propagation patterns within these decomposed struc-
+tures. We present a drill-down evaluation framework that
+decomposes complex SQL queries and questions from the
+BIRD-mini dataset (Li et al. 2023), allowing for a fine-
+grained analysis of hallucination propagation. Through our
+analysis, we report three key findings: (1) Recurrent Hallu-
+cinations: Many hallucinations persistently propagate from
+early, structurally simple sub-queries through to final steps,
+indicating systematic misalignment. (2) Final-Step Emer-
+gence: Fewer, but specific hallucination types emerge in the
+final step, suggesting a distinct failure mode tied to query
+complexity. (3) History Amplifies Recurrence: While contex-
+tual information between sub-queries can improve overall ac-
+curacy and reduce the frequency of emergent hallucinations,
+it consequently increases the recurrence of early-stage hallu-
+cinations. This framework establishes a methodology to bet-
+ter understand LLM weaknesses and failure modes for Text-
+to-SQL systems.
+
 ## Methodology
 
 ### Progressive Sub-Query and Sub-Question Generation
@@ -133,5 +158,12 @@ start from SELECT
   year={2024},
   volume={abs/2405.15307},
   url={https://api.semanticscholar.org/CorpusId:270045343}
+}
+@article{li2023bird,
+  title     = {BIRD: BIg Bench for LaRge-scale Database Grounded Text-to-SQL Evaluation},
+  author    = {Li, Jinyang and Hui, Binyuan and Qu, Ge and Yang, Jiaxi and Li, Binhua and Li, Bowen and Wang, Bailin and Qin, Bowen and Cao, Rongyu and Geng, Ruiying and Huo, Nan and Zhou, Xuanhe and Ma, Chenhao and Li, Guoliang and Chang, Kevin C. C. and Huang, Fei and Cheng, Reynold and Li, Yongbin},
+  journal   = {arXiv preprint arXiv:2305.03111},
+  year      = {2023},
+  url       = {https://arxiv.org/abs/2305.03111}
 }
 ```
