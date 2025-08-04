@@ -1,6 +1,6 @@
 # BIRD-mini Progressive Drill-Down
 
-![bird progressive drill down](materials/pipe-3.png?raw=true)
+![bird progressive drill down](materials/pipe.png?raw=true)
 
 ## Prompts:
 
