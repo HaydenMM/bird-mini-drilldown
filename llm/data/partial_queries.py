@@ -8,7 +8,7 @@ from anthropic import Anthropic, HUMAN_PROMPT, AI_PROMPT
 
 from table_schema import generate_schema_prompt
 
-claude_api_key = "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"  # Replace with your real API key
+claude_api_key = "YOUR_API_KEY"  # Replace with your real API key
 
 client = Anthropic(
     api_key=claude_api_key,
@@ -75,7 +75,7 @@ def generate_partial_queries(original_sql):
 
 chat_history = []
 
-def connect_gpt(engine, prompt, is_original, max_tokens=100, temperature=0.7, stop=None):
+def connect_claude(engine, prompt, is_original, max_tokens=100, temperature=0.7, stop=None):
     """Use Claude 3.5 Sonnet instead of GPT."""
     global chat_history
 
@@ -127,7 +127,7 @@ def generate_nl_question(original_question, partial_sql, is_original):
 
         Generate only the natural language question.
         """
-    return connect_gpt("claude-3.5-sonnet", prompt, is_original)
+    return connect_claude("claude-3.5-sonnet", prompt, is_original)
 
 def process_json(input_file, output_file):
     with open(input_file, 'r') as f:
