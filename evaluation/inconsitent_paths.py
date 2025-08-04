@@ -11,7 +11,7 @@ def filter_inconsistent_paths(data):
     return [entry for entry in data if has_inconsistent_path(entry["path"])]
 
 # Load your original file
-with open("/Users/hmmoore/Desktop/mini_dev/evaluation/path_eval_log.json", "r") as f:
+with open("mini_dev/evaluation/path_eval_log.json", "r") as f:
     original_data = json.load(f)
 
 # Filter inconsistent paths
