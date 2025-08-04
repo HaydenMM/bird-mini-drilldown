@@ -32,13 +32,7 @@ We expand the original BIRD-mini dataset by:
 ### Drill-Down Analysis
 We have effectively expanded the original BIRD-mini 500 to **1021 question/query** pairs, additionally, created a progressive path that we can test where errors/hallucinations manifest.
 
-1. We **evaluate six LLMs** on this new BIRD-mini drill-down dataset
-  - GPT-4-Turbo
-  - GPT-4.0o
-  - GPT-4.0o-mini
-  - GPT-4.1-mini
-  - Claude-3.5-Sonnet
-  - Claude-3.7-Sonnet
+1. We **evaluate six LLMs** on this new BIRD-mini drill-down dataset (GPT-4-Turbo, GPT-4.0o, GPT-4.0o-mini, GPT-4.1-mini, Claude-3.5-Sonnet, Claude-3.7-Sonnet)
 
     You will need to configure the engine in the run_gpt.sh or run_claude.sh file (i.e. `engine='gpt-4-turbo, claude-3-5-sonnet-latest'`)
     Additionally, you will need to set the path to your BIRD-mini drill-down dataset generated in the last section (i.e `eval_path='./data/mini_dev_postgresql_drill_down_claude.json'`)
