@@ -14,10 +14,10 @@ import torch
 from prompt import generate_combined_prompts_one
 
 """ Anthropic configure """
-api_key = "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"
+api_key = "API_KEY"
 
 os.environ["HF_HUB_DISABLE_SSL_VERIFICATION"] = "1"
-os.environ["HF_TOKEN"] = "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"
+os.environ["HF_TOKEN"] = "HF_API_KEY"
 
 # Create Anthropic client
 client = Anthropic(api_key=api_key)
