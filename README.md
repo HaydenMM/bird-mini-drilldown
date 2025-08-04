@@ -11,23 +11,23 @@ We expand the original BIRD-mini dataset by:
     - GPT-4-Turbo
     - Claude-3.5-Sonnet
 
-```
-cd llm/data/
-python partial_queries.py --engine gpt-4-turbo
-python partial_queries.py --engine claude-3-5-sonnet-latest
-```
-Example Output:
-```
-mini_dev_postgresql_drill_down_gpt.json
-mini_dev_postgresql_drill_down_claude.json
-```
+    ```
+    cd llm/data/
+    python partial_queries.py --engine gpt-4-turbo
+    python partial_queries.py --engine claude-3-5-sonnet-latest
+    ```
+    Example Output:
+    ```
+    mini_dev_postgresql_drill_down_gpt.json
+    mini_dev_postgresql_drill_down_claude.json
+    ```
 
 3. **Cross Validate (Filter)** sub-question from both models using `CosineSimilarity(GPT-4-Turbo, Claude-3.5-Sonnet) >= 0.65`, indicating strong agreement between the model's generated outputs.
-```
-python compare_questions.py --file1 mini_dev_postgresql_drill_down_gpt.json
-                            --file2 mini_dev_postgresql_drill_down_claude.json
-                            --threshold 0.65
-```
+    ```
+    python compare_questions.py --file1 mini_dev_postgresql_drill_down_gpt.json
+                                --file2 mini_dev_postgresql_drill_down_claude.json
+                                --threshold 0.65
+    ```
 
 ### Drill-Down Analysis
 We have effectively expanded the original BIRD-mini 500 to **1021 question/query** pairs, additionally, created a progressive path that we can test where errors/hallucinations manifest.
@@ -40,42 +40,42 @@ We have effectively expanded the original BIRD-mini 500 to **1021 question/query
   - Claude-3.5-Sonnet
   - Claude-3.7-Sonnet
 
-You will need to configure the engine in the run_gpt.sh or run_claude.sh file (i.e. `engine='gpt-4-turbo, claude-3-5-sonnet-latest'`)
-Additionally, you will need to set the path to your BIRD-mini drill-down dataset generated in the last section (i.e `eval_path='./data/mini_dev_postgresql_drill_down_claude.json'`)
-
-```
-cd llm
-sh ./run/run_gpt.sh
-sh ./run/run_claude.sh
-```
-
-Example Output:
-`llm/exp_result/exp_progressive_3_5_claude/predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json`
-
-These outputs need to be cleaned since the outputs include deliminators for the bird database categories (i.e. `t----- bird -----\tdebit_card_specializing",`)
-Adjust the input and output file names at the bottom of the file 
-```
-input_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json"  # Replace with your input JSON file
-output_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json"
-```
-
-```
-cd llm/data/
-python fix_data.py
-```
+    You will need to configure the engine in the run_gpt.sh or run_claude.sh file (i.e. `engine='gpt-4-turbo, claude-3-5-sonnet-latest'`)
+    Additionally, you will need to set the path to your BIRD-mini drill-down dataset generated in the last section (i.e `eval_path='./data/mini_dev_postgresql_drill_down_claude.json'`)
+    
+    ```
+    cd llm
+    sh ./run/run_gpt.sh
+    sh ./run/run_claude.sh
+    ```
+    
+    Example Output:
+    `llm/exp_result/exp_progressive_3_5_claude/predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json`
+    
+    These outputs need to be cleaned since the outputs include deliminators for the bird database categories (i.e. `t----- bird -----\tdebit_card_specializing",`)
+    Adjust the input and output file names at the bottom of the file 
+    ```
+    input_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL.json"  # Replace with your input JSON file
+    output_file = "predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json"
+    ```
+    
+    ```
+    cd llm/data/
+    python fix_data.py
+    ```
 
 2. We **annotate hallucinations** that are identified in the drill-down evaluation results
 We evaluate all six models performance and hallucination patterns via two Jupyter notebooks:
 
-This first notebook allows you to pass in your cleaned results from the drill-down (i.e. `predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json`) and for all of the queries that fail Execution Accuracy (EX) will be annotated with the hallucination taxonomy adopted from "Before Generation, Align it! A Novel and Effective Strategy for Mitigating Hallucinations in Text-to-SQL Generation" (Qu et al. 2024)
-
-`notebooks/Eval.ipynb`
-
-After annotating the results with the identified hallucination categories this second notebook plots hallucination patterns and results based on hallucination types:
-- P(Hallucination in Final Step | Hallucination Occured Earlier in Drill-Down)
-- P(Hallucination in Final Step | Hallucination Did NOT Occur Earlier in Drill-Down)
-
-`notebooks/Figures.ipynb`
+    This first notebook allows you to pass in your cleaned results from the drill-down (i.e. `predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json`) and for all of the queries that fail Execution Accuracy (EX) will be annotated with the hallucination taxonomy adopted from "Before Generation, Align it! A Novel and Effective Strategy for Mitigating Hallucinations in Text-to-SQL Generation" (Qu et al. 2024)
+    
+    `notebooks/Eval.ipynb`
+    
+    After annotating the results with the identified hallucination categories this second notebook plots hallucination patterns and results based on hallucination types:
+    - P(Hallucination in Final Step | Hallucination Occured Earlier in Drill-Down)
+    - P(Hallucination in Final Step | Hallucination Did NOT Occur Earlier in Drill-Down)
+    
+    `notebooks/Figures.ipynb`
 
 ## Results
 ![graph 1 probability of emergent hallucination in final step](materials/g1.png?raw=true)
