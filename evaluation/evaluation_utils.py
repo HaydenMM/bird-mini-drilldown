@@ -21,7 +21,7 @@ def connect_postgresql():
     # Open database connection
     # Connect to the database
     db = psycopg2.connect(
-        "dbname=BIRD user=hmmoore host=localhost password="" port=5432"
+        "dbname=BIRD user=YOUR_USERNAME host=localhost password="" port=5432"
     )
     return db
 
@@ -126,7 +126,7 @@ def print_data(score_lists, count_lists, metric="F1 Score",result_log_file=None)
     
      # Log to file in append mode
     if result_log_file is not None:
-        with open("/Users/hmmoore/Desktop/mini_dev/llm/exp_result/turbo_output_kg/predict_mini_dev_gpt-4-turbo_cot_PostgreSQL.json", "a") as log_file:
+        with open("mini_dev/llm/exp_result/turbo_output_kg/predict_mini_dev_gpt-4-turbo_cot_PostgreSQL.json", "a") as log_file:
             log_file.write(f"start calculate {metric}\n")
             log_file.write("{:20} {:20} {:20} {:20} {:20}\n".format("", *levels))
             log_file.write(
