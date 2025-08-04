@@ -66,7 +66,15 @@ python fix_data.py
 
 2. We **annotate hallucinations** that are identified in the drill-down evaluation results
 We evaluate all six models performance and hallucination patterns via two Jupyter notebooks:
+
+This first notebook allows you to pass in your cleaned results from the drill-down (i.e. `predict_mini_dev_claude-3-5-sonnet-latest_cot_PostgreSQL_cleaned_queries.json`) and for all of the queries that fail Execution Accuracy (EX) will be annotated with the hallucination taxonomy adopted from "Before Generation, Align it! A Novel and Effective Strategy for Mitigating Hallucinations in Text-to-SQL Generation" (Qu et al. 2024)
+
 `notebooks/Eval.ipynb`
+
+After annotating the results with the identified hallucination categories this second notebook plots hallucination patterns and results based on hallucination types:
+- P(Hallucination in Final Step | Hallucination Occured Earlier in Drill-Down)
+- P(Hallucination in Final Step | Hallucination Did NOT Occur Earlier in Drill-Down)
+
 `notebooks/Figures.ipynb`
 
 ## Results
@@ -122,5 +130,14 @@ start from SELECT
   journal={Advances in Neural Information Processing Systems},
   volume={36},
   year={2024}
+}
+
+@article{Qu2024BeforeGAA,
+  title={Before Generation, Align it! A Novel and Effective Strategy for Mitigating Hallucinations in Text-to-SQL Generation},
+  author={Ge Qu and Jinyang Li and Bowen Li and Bowen Qin and Nan Huo and Chenhao Ma and Reynold Cheng},
+  journal={ArXiv},
+  year={2024},
+  volume={abs/2405.15307},
+  url={https://api.semanticscholar.org/CorpusId:270045343}
 }
 ```
