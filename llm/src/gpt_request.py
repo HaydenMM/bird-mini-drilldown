@@ -16,11 +16,11 @@ import torch
 from prompt import generate_combined_prompts_one
 
 """ OpenAI configure """
-api_key="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"
+api_key="API_KEY"
 
 import os
 os.environ["HF_HUB_DISABLE_SSL_VERIFICATION"] = "1"
-os.environ["HF_TOKEN"] = "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"
+os.environ["HF_TOKEN"] = "HF_API_KEY"
 
 
 # Create OpenAI client with SSL verification disabled
@@ -83,42 +83,6 @@ def connect_gpt(engine, prompt, max_tokens, temperature, stop, is_original):
             time.sleep(4)
 
     return response_content
-
-
-
-# def connect_gpt(engine, prompt, max_tokens, temperature, stop):
-#     """
-#     Function to connect to the GPT API and get the response.
-#     """
-#     MAX_API_RETRY = 10
-#     for i in range(MAX_API_RETRY):
-#         time.sleep(2)
-#         try:
-#             if engine == "gpt-3.5-turbo-instruct":
-#                 result = client.completions.create(
-#                     model="gpt-3.5-turbo-instruct",
-#                     prompt=prompt,
-#                     max_tokens=max_tokens,
-#                     temperature=temperature,
-#                     stop=stop,
-#                 )
-#                 result = result.choices[0].text
-#             else:  # gpt-4-turbo, gpt-4, gpt-4-32k, gpt-3.5-turbo
-#                 result = client.chat.completions.create(
-#                     model=engine,
-#                     messages=[{"role": "user", "content": prompt}],
-#                     temperature=temperature,
-#                     max_tokens=max_tokens,
-#                     stop=stop,
-#                 )
-#                 result = result.choices[0].message.content
-#                 print(result)
-#             break
-#         except Exception as e:
-#             result = f"error: {e}"
-#             print(result)
-#             time.sleep(4)
-#     return result
 
 
 def decouple_question_schema(datasets, db_root_path):
