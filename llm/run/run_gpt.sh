@@ -8,8 +8,8 @@ cot='True'
 YOUR_API_KEY='YOUR_API_KEY'
 
 # Choose the engine to run, e.g. gpt-4, gpt-4-32k, gpt-4-turbo, gpt-35-turbo, GPT35-turbo-instruct
-# engine='gpt-3.5-turbo'
-engine='gemma'
+
+engine='gpt-4-turbo'
 
 # Choose the number of threads to run in parallel, 1 for single thread
 num_threads=1
