@@ -241,4 +241,4 @@ def process_json(input_file, output_file):
         print(f"Completed entry. Total entries so far: {len(output_data)}")
 
 if __name__ == "__main__":
-    process_json("full_dev_postgresql.json", "full_dev_postgresql_drill_down.json")
+    process_json("mini_dev_postgresql.json", "mini_dev_postgresql_drill_down_gpt.json")
