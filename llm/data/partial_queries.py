@@ -159,4 +159,4 @@ def process_json(input_file, output_file):
         json.dump(output_data, f, indent=2)
 
 if __name__ == "__main__":
-    process_json("mini_dev_postgresql.json", "mini_dev_postgresql_partial_claude_june_2025.json")
+    process_json("mini_dev_postgresql.json", "mini_dev_postgresql_drill_down_claude.json")
