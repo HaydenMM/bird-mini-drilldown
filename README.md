@@ -1,4 +1,4 @@
-# BIRD-mini Drill-Down Analysis
+# Drill-Down Analysis of LLM Hallucination Patterns in Text-to-SQL
 
 ![bird progressive drill down](materials/pipe.png?raw=true)
 
