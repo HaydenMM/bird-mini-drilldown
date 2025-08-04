@@ -1,4 +1,4 @@
-bird_schema = {
+{
     "account": [
         "account_id",
         "district_id",
