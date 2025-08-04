@@ -21,5 +21,5 @@ def save_sql_queries(input_file, partial_file, output_file):
         json.dump(json_out, out_file, indent=4)
 
 if __name__ == "__main__":
-    save_sql_queries("predict_mini_dev_gpt-4-turbo_cot_PostgreSQL_cleaned_queries.json", "/Users/hmmoore/Desktop/mini_dev/llm/data/mini_dev_postgresql_partial_4_turbo_june_2025.json", "original_queries.json")
+    save_sql_queries("predict_mini_dev_gpt-4-turbo_cot_PostgreSQL_cleaned_queries.json", "mini_dev/llm/data/mini_dev_postgresql_partial_4_turbo_june_2025.json", "original_queries.json")
 
