@@ -1,4 +1,4 @@
-# BIRD-mini Progressive Drill-Down
+# BIRD-mini Drill-Down Analysis
 
 ![bird progressive drill down](materials/pipe.png?raw=true)
 
