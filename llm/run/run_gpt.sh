@@ -5,7 +5,7 @@ use_knowledge='True'
 mode='mini_dev' # dev, train, mini_dev
 cot='True'
 
-YOUR_API_KEY='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'
+YOUR_API_KEY="YOUR_API_KEY"
 
 # Choose the engine to run, e.g. gpt-4, gpt-4-32k, gpt-4-turbo, gpt-35-turbo, GPT35-turbo-instruct
 
