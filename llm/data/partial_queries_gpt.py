@@ -11,31 +11,65 @@ client = openai
 
 def extract_conditions(sql):
     parsed = sqlparse.parse(sql)[0]
-    where_seen = False
-    conditions = []
+    where_clause = None
 
     for token in parsed.tokens:
-        if where_seen:
-            if isinstance(token, sqlparse.sql.Where):
-                condition_tokens = token.tokens[2:]  # skip "WHERE" and whitespace
-                buffer = ""
-                for ct in condition_tokens:
-                    if ct.is_whitespace:
-                        continue
-                    if ct.ttype is None and ct.value.upper() == "AND":
-                        if buffer:
-                            conditions.append(buffer.strip())
-                            buffer = ""
-                    else:
-                        buffer += str(ct)
-                if buffer:
-                    conditions.append(buffer.strip())
+        if isinstance(token, sqlparse.sql.Where):
+            where_clause = token
             break
-        if token.ttype is sqlparse.tokens.Keyword and token.value.upper() == "WHERE":
-            where_seen = True
+
+    if not where_clause:
+        return []
+
+    tokens = where_clause.tokens[2:]  # Skip "WHERE" and the whitespace
+    conditions = []
+
+    buffer = ""
+    parens = 0
+    in_between = False
+    i = 0
+
+    while i < len(tokens):
+        token = tokens[i]
+        val = str(token).strip().upper()
+
+        # Stop parsing if we hit GROUP BY, ORDER BY, etc.
+        if val.startswith(("GROUP BY", "ORDER BY", "LIMIT", "HAVING")):
+            break
+
+        # Parentheses tracking for subqueries or functions
+        parens += token.value.count('(')
+        parens -= token.value.count(')')
+
+        if val == "BETWEEN":
+            in_between = True
+            buffer += " " + str(token)
+            i += 1
+            continue
+
+        # Handle AND inside BETWEEN (BETWEEN X AND Y)
+        if val == "AND" and in_between:
+            buffer += " AND"
+            i += 1
+            if i < len(tokens):
+                buffer += " " + str(tokens[i])
+            in_between = False
+        elif val == "AND" and parens == 0:
+            # Top-level AND → condition split point
+            if buffer.strip():
+                conditions.append(buffer.strip())
+            buffer = ""
+        else:
+            buffer += " " + str(token)
+
+        i += 1
+
+    if buffer.strip():
+        conditions.append(buffer.strip())
 
     print(f"Extracted conditions: {conditions}")
     return conditions
+
 
 def generate_partial_queries(original_sql):
     conditions = extract_conditions(original_sql)
