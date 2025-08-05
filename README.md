@@ -88,7 +88,8 @@ We evaluate all six models performance and hallucination patterns via two Jupyte
 ![graph 1 probability of emergent hallucination in final step](materials/g1.png?raw=true)
 ![graph 2 probability of recurrent hallucination in final step](materials/g2.png?raw=true)
 ![graph 3 probability of emergent hallucination in final step with added LLM history context](materials/g3.png?raw=true)
-![graph 3 probability of recurrent hallucination in final step with added LLM history context](materials/g4.png?raw=true)
+![graph 4 probability of recurrent hallucination in final step with added LLM history context](materials/g4.png?raw=true)
+![Most common hallucination types](materials/g5.png?raw=true)
 
 ## Prompts
 **Prompt 1: Generating Sub-Questions**
