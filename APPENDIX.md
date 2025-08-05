@@ -1,6 +1,6 @@
 ## Appendix (A) Example
 
-mini_dev/evaluation/path_eval_log_paper_path_halluc_4_0_o_mini_history.json
+evaluation/path_eval_log_paper_path_halluc_4_0_o_history.json
 
 Input: mini_dev_postgresql.json
 
