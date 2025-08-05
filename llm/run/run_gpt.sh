@@ -1,11 +1,11 @@
-eval_path='./data/mini_dev_postgresql_partial.json' # _sqlite.json, _mysql.json, _postgresql.json
+eval_path='./data/mini_dev_postgresql_partial_4_turbo_june_2025.json' # _sqlite.json, _mysql.json, _postgresql.json
 dev_path='./output/'
-db_root_path='./data/dev_databases/'
+db_root_path='./data/dev_databases_old/'
 use_knowledge='True'
 mode='mini_dev' # dev, train, mini_dev
 cot='True'
 
-YOUR_API_KEY='YOUR_API_KEY'
+YOUR_API_KEY='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'
 
 # Choose the engine to run, e.g. gpt-4, gpt-4-32k, gpt-4-turbo, gpt-35-turbo, GPT35-turbo-instruct
 
@@ -20,8 +20,8 @@ num_threads=1
 sql_dialect='PostgreSQL'
 
 # Choose the output path for the generated SQL queries
-data_output_path='./exp_result/exp_19_/'
-data_kg_output_path='./exp_result/exp_19/'
+data_output_path='./exp_result/exp_progressive_4_1_mini'
+data_kg_output_path='./exp_result/exp_progressive_4_1_mini'
 
 echo "generate $engine batch, run in $num_threads threads, with knowledge: $use_knowledge, with chain of thought: $cot"
 python3 -u ./src/gpt_request.py --db_root_path ${db_root_path} --api_key ${YOUR_API_KEY} --mode ${mode} \
