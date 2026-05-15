@@ -1,4 +1,4 @@
-# Drill-Down Analysis of LLM Hallucination Patterns in Text-to-SQL
+# Evaluating Error Propagation in Decomposed Text-to-SQL Query Generation
 
 ![bird progressive drill down](materials/pipe.png?raw=true)
 
