@@ -1,6 +1,6 @@
 # Evaluating Error Propagation in Decomposed Text-to-SQL Query Generation
 
-![bird progressive drill down](materials/pipe.png?raw=true)
+![bird progressive drill down](materials/canvas.png?raw=true)
 
 
 ## Citation:
